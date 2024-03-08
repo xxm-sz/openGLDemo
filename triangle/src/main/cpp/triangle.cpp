@@ -20,6 +20,9 @@ jobject thiz
 ) {
 
 }
+
+Jint p_programObject;
+
 extern "C" JNIEXPORT void JNICALL
 Java_com_xxm_triangle_NativeLib_glesInit(JNIEnv
 *env,
@@ -45,6 +48,37 @@ GLuint fragmentShader;
 GLuint programObject;
 GLuint linked;
 
+
 vertexShader = LoadShader(GL_VERTEX_SHADER, vShaderStr);
 fragmentShader = LoadShader(GL_FRAGMENT_SHADER, fShaderStr);
+programObject = glCreateProgram();
+if(programObject==0){
+return;
+}
+
+glAttachShader(programObject, vertexShader
+);
+glAttachShader(programObject, fragmentShader
+);
+
+glLinkProgram(programObject);
+glGetProgramV(programV, GL_LINK_STATUS, &linked
+)
+
+if(!linked){
+GLint infoLen = 0;
+glGetProgramiv(programObject, GL_INFO_LOG_LENGTH, &infoLen
+);
+
+if(infoLen>1){
+char *infoLog = (char *) malloc(sizeof(char) * infoLen);
+glGetProgramInfoLog(programObject, infoLen, NULL, infoLog
+);
+free(infoLog);
+}
+glDeleteProgram(programObject);
+}
+
+p_programObject = programObject;
+glClearColor(1.0f,1.0f,1.0f,1.0f);
 }

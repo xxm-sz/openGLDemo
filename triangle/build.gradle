@@ -20,6 +20,11 @@ android {
         }
     }
 
+    sourceSets.main{
+        jni.srcDirs=['src/main/cpp']
+        jniLibs.srcDirs('libs')
+    }
+
     dataBinding{
         enable true
     }
