@@ -4,21 +4,26 @@
 
 #include "Utils.h"
 
-extern "C" JNIEXPORT void JNICALL
-Java_com_xxm_triangle_NativeLib_glesResize(JNIEnv
-*env,
-jobject thiz, jint
-width,
-jint height
-) {
+jint g_width;
+jint g_height;
 
+extern "C" JNIEXPORT void JNICALL
+Java_com_xxm_triangle_NativeLib_glesResize(JNIEnv *env,jobject thiz, jint width,jint height) {
+    g_width = width;
+    g_height = height;
 }
-extern "C" JNIEXPORT void JNICALL
-Java_com_xxm_triangle_NativeLib_glesRender(JNIEnv
-*env,
-jobject thiz
-) {
 
+extern "C" JNIEXPORT void JNICALL
+Java_com_xxm_triangle_NativeLib_glesRender(JNIEnv *env,jobject thiz) {
+    GLfloat vVertices[]={
+            0.0f,  0.5f, 0.0f,
+            -0.5f, -0.5f, 0.0f,
+            0.5f, -0.5f, 0.0f};
+    glClear(GL_COLOR_BUFFER_BIT);
+    glUseProgram(g_programObject);
+    glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,0,xVertices);
+    glEnableVertexAttribArray(0);
+    glDrawArrays(GL_TRIANGLES,0);
 }
 
 Jint p_programObject;
